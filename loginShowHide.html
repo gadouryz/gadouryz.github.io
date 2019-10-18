@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login Show/Hide Password Example</title>
+    <style>
+
+        .hidden{
+            position:absolute;
+            left:-10000px;
+            top:auto;
+            width:1px;
+            height:1px;
+            overflow:hidden;
+        }        
+</style>
+</head>
+<body>
+    <!--login input fields-->
+<form action="">
+    <h4>Please enter your name and password.</h4>
+    <label for="shUserName" class="form-grp_label">User Name</label><br>
+    <input type="text" id="shUserName" class="inputBox" required><br><br>
+    <label for="shPassword" class="form-grp_label">Password</label><br>
+    <input type="password" id="shPassword" aria-describedby="showHideMessage showHideMessageTimeOut" class="inputBox" required>  
+    <span aria-live="polite">
+    <button type="button" id="showHide1"  onclick="showHide()" >Show Password</button>
+    <div role="region" id="showHideMessage" ></div>
+ 
+    <div role="region"id="showHideMessageTimeOut" class="hidden"></div> 
+    </span>     
+
+</form>
+
+
+<script>
+
+  //ShowHide button for the first password field with Username and Password
+  function showHide(){
+var showHideButton = document.getElementById("showHide1");
+var passField = document.getElementById("shPassword");
+var warnMessage = document.getElementById("showHideMessage");
+var isFocused = "shPassword";
+
+
+//Checks the type of the input field. If its type=password it changes it to text and throws a warning message
+if(passField.type === "password"){
+    passField.type = "text";
+    showHideButton.innerText = "Hide Password";
+    showHideButton.focus();
+    warnMessage.textContent = "Showing your password in public may compromise security.";
+    alertTestTimer1(isFocused);
+
+   
+   
+
+//If input field type does not equal password, it changes it to password type and removes the warning message.
+}else{
+    passField.type = "password";
+    showHideButton.innerText = "Show Password";
+
+    warnMessage.textContent ="";
+ 
+    }
+
+    function alertTestTimer1(myId1){
+    window.setTimeout(alertTest1, 4000, myId1);
+}
+
+//alert for the first input fields. Default set to activate after 4 seconds.
+function alertTest1(myId1){
+
+    
+    var focusedItem = document.getElementById(myId1);
+    var isFocused = (document.activeElement === focusedItem);
+    console.log(myId1);
+    
+    if(isFocused == true){
+        var timeOut = document.getElementById("showHideMessageTimeOut");
+        var warnDiv = document.getElementById("showHideMessageTimeOut");
+        warnDiv.innerText = "Your Time has run out";
+        passField.type = "password";
+        showHideButton.innerText = "Show Password";
+        
+        warnMessage.textContent ="";
+        timeOut.innerText= "The Time has run out";
+           
+
+   }else if(isFocused == false){
+    passField.type = "password";
+    showHideButton.innerText = "Show Password";
+    
+    warnMessage.textContent ="";
+    
+
+}
+}
+}
+
+</script>
+</body>
+</html>
