@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Address Table</title>
+    <style>
+    body{
+        font-family: Arial, Helvetica, sans-serif;    }
+    td{
+        text-align: center;
+        
+    }
+    th{
+        background-color: #E6F3FD;
+    }
+    th,td{
+        padding:10px;
+    }
+    table,th,td{
+        border: 3px ridge #0074D6;
+        border-collapse: collapse;
+
+    }
+    .hidden{
+    position:absolute;
+    left:-10000px;
+    top:auto;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+    }
+    .sortButton{
+      cursor: pointer;
+
+    }
+    
+    
+    </style>
+</head>
+<body>
+    <h2>TAABLEEEE</h2>
+    <div aria-live="polite" class="hidden" id="deletedAnnouncement"></div>
+
+    <table style="width:100%" id="table">
+        <tr>
+            <th onclick="sortByName()" id="sortNameAscend" class="sortButton">Name ↕</th>
+            <th>Address</th>
+            <th onclick="sortByNumber()" id="sortNum" class="sortButton">Phone Number</th>
+            <th>Email</th>
+            <th> Edit or Delete</th>
+        </tr>
+        <tr id="Zach Gadoury">
+            <td class="name" id="name1"><h3>Gadoury, Zach</h3> </td>
+            <td>2945 Amelia ct. Clayon, NC. 27520</td>
+            <td>895-854-5489</td>
+            <td>zach@outreach.com</td>
+            <td><button class="editButton" onclick="edit()" id="deleteButton1">Edit</button> <br> <button onclick="deleteTr(this)">Delete <div class="hidden">Zach Gadoury from Contacts</div> </button></td>
+        </tr>
+        <tr id="Kelly Davenport">
+            <td class="name" id="name3"><h3>Davenport, Kelly </h3></Davenport></td>
+            <td>758 Sherr road. Charlotte, NC. 28105</td>
+            <td>458-659-6458</td>
+            <td>kelldav@gmail.com</td>
+            <td><button class="editButton" onclick="edit()">Edit</button> <br> <button onclick="deleteTr(this)">Delete <div class="hidden">Kelly Davenport from Contacts</div></button></td>
+        </tr>
+        <tr id="Timmothy Timson">
+            <td class="name" id="name2"><h3>Timson, Timmothy</h3></td>
+            <td>1111 Rope way. Raleigh, NC. 27513</td>
+            <td>123-446-7890</td>
+            <td>timtim@tim.com</td>
+            <td><button class="editButton" onclick="edit()">Edit</button> <br> <button onclick="deleteTr(this)">Delete <div class="hidden">Timmothy Timson from Contacts</div></button></td>
+        </tr>
+        <tr id="Joe Smith">
+            <td class="name" id="name2"><h3>Smith, Joe</h3></td>
+            <td>1111 Rope way. Raleigh, NC. 27513</td>
+            <td>123-446-7890</td>
+            <td>jsmith1234@gmail.com</td>
+            <td><button class="editButton" onclick="edit()">Edit</button> <br> <button onclick="deleteTr(this)">Delete <div class="hidden">Joe Smith from Contacts</div></button></td>
+        </tr>
+        <tr id="Jane Doe">
+            <td class="name" id="name2"><h3>Doe, Jane</h3></td>
+            <td>1111 Rope way. Raleigh, NC. 27513</td>
+            <td>123-446-7890</td>
+            <td>jdlovescats@gmail.com</td>
+            <td><button class="editButton" onclick="edit()">Edit</button> <br> <button onclick="deleteTr(this)">Delete <div class="hidden">Jane Doe from Contacts</div></button></td>
+        </tr>
+        <tr id="Jack Skellington">
+            <td class="name" id="name2"><h3>Skellington, Jack</h3></td>
+            <td>333 Spooky court. Halloweentown, Disney. 12345</td>
+            <td>123-446-7890</td>
+            <td>falllover@halloweentown.com</td>
+            <td><button class="editButton" onclick="edit()">Edit</button> <br> <button onclick="deleteTr(this)">Delete <div class="hidden">Jack Skellington from Contacts</div></button></td>
+        </tr>
+
+
+
+
+
+
+
+    </table>
+
+    <script>
+
+      var sortByNameAscend = true;
+    function edit(){
+        alert("Function not implemented yet");
+    }
+    function sortByName(){
+
+      if(sortByNameAscend){
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("table");
+        switching = true;
+
+        while (switching) {
+
+        switching = false;
+        rows = table.rows;
+
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[0];
+      y = rows[i + 1].getElementsByTagName("TD")[0];
+      //check if the two rows should switch place:
+      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+  sortByNameAscend = false;
+  document.getElementById("sortNameAscend").innerHTML = "Name ↑";
+}else{
+    var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("table");
+  switching = true;
+  while (switching) {
+    switching = false;
+    rows = table.rows;
+    for (i = 1; i < (rows.length - 1); i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("TD")[0];
+      y = rows[i + 1].getElementsByTagName("TD")[0];
+      //check if the two rows should switch place:
+      if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+  sortByNameAscend = true;
+  document.getElementById("sortNameAscend").innerHTML = "Name ↓";
+}
+    }
+
+    function sortByNumber(){
+      var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("table");
+        switching = true;
+
+        while (switching) {
+
+        switching = false;
+        rows = table.rows;
+
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[2];
+      y = rows[i + 1].getElementsByTagName("TD")[2];
+      //check if the two rows should switch place:
+      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+
+    }
+    function deleteTr(element){
+       var removed = document.getElementById(element.parentNode.parentNode.id);
+        if(confirm("Are you sure you want to delete this row?")){
+        removed.parentNode.removeChild(removed);
+        document.getElementById("deletedAnnouncement").innerHTML = "The row has been deleted.";
+        }
+    }
+
+
+    
+    
+    </script>
+</body>
+</html>
