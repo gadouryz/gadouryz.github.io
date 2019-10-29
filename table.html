@@ -35,19 +35,71 @@
       cursor: pointer;
 
     }
+    .modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.confirmModalContent {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  padding-bottom: 10%;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.closeModal {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.modalButton{
+  background-color: #0074D6;
+  color: white;
+  padding: 20px;
+  width: 100px;
+  height: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+.sortButton:focus{
+  outline: solid darkblue;
+}
     
     
     </style>
 </head>
 <body>
-    <h2>TAABLEEEE</h2>
+    <h2>Address Book</h2>
     <div aria-live="polite" class="hidden" id="deletedAnnouncement"></div>
+    <div class="modal" id="confirmModal">
+    <div class="confirmModalContent">
+      <button class="closeModal" id="closeModalButton">x</button>
+      <p>Are you sure you want to delete this address book entry?</p>
+      <button class="modalButton" id="yesCloseModal" onclick="deleteConfirm(this.id)">Yes</button>
+      <button class="modalButton" id="noCloseModal" onclick="deleteConfirm(this.id)">No</button>
+    </div>
+  </div>
 
     <table style="width:100%" id="table">
         <tr>
-            <th onclick="sortByName()" id="sortNameAscend" class="sortButton">Name ↕</th>
+            <th onclick="sortByName()" id="sortNameAscend" class="sortButton" tabindex="1">Name ↕</th>
             <th>Address</th>
-            <th onclick="sortByNumber()" id="sortNum" class="sortButton">Phone Number</th>
+            <th onclick="sortByNumber()" id="sortNum" class="sortButton" tabindex="1">Phone Number ↕</th>
             <th>Email</th>
             <th> Edit or Delete</th>
         </tr>
@@ -105,10 +157,34 @@
     <script>
 
       var sortByNameAscend = true;
+      var sortByNum = true;
     function edit(){
         alert("Function not implemented yet");
     }
+    
+    document.getElementById("sortNum")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("sortNum").click();
+    }
+    if (event.keyCode === 32) {
+        document.getElementById("sortNum").click();
+    }
+});
+document.getElementById("sortNameAscend")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("sortNameAscend").click();
+    }
+    if (event.keyCode === 32) {
+        document.getElementById("sortNameAscend").click();
+    }
+
+});
     function sortByName(){
+      document.getElementById("sortNum").innerHTML = "Phone Number ↕";
 
       if(sortByNameAscend){
         var table, rows, switching, i, x, y, shouldSwitch;
@@ -172,7 +248,17 @@
 }
     }
 
+
+
+
+
+
+
     function sortByNumber(){
+
+      document.getElementById("sortNameAscend").innerHTML = "Name ↕";
+
+      if(sortByNum == true){
       var table, rows, switching, i, x, y, shouldSwitch;
         table = document.getElementById("table");
         switching = true;
@@ -202,16 +288,116 @@
       rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
       switching = true;
     }
-  }
+  }  sortByNum = false;
+     document.getElementById("sortNum").innerHTML = "Phone Number ↑";
 
+    }else{
+      var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("table");
+        switching = true;
+
+        while (switching) {
+
+        switching = false;
+        rows = table.rows;
+
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[2];
+      y = rows[i + 1].getElementsByTagName("TD")[2];
+      //check if the two rows should switch place:
+      if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch = true;
+        break;
+      }
     }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+  sortByNum = true;
+  document.getElementById("sortNum").innerHTML = "Phone Number ↓";
+    }
+    }
+    var chosenRow;
     function deleteTr(element){
        var removed = document.getElementById(element.parentNode.parentNode.id);
-        if(confirm("Are you sure you want to delete this row?")){
+       var modal = document.getElementById("confirmModal");
+       var closeButton = document.getElementById("closeModalButton");
+       chosenRow = removed;
+       modal.style.display = "block";
+
+       closeButton.onclick = function(){
+         modal.style.display = "none";
+       }
+       document.getElementById("yesCloseModal").focus();
+       trapFocus(modal);
+    }
+      function deleteConfirm(e){
+         var yesorno = document.getElementById(e);
+         console.log(yesorno.innerHTML);
+         console.log(chosenRow);
+         if(yesorno.innerHTML == "Yes"){
+         chosenRow.parentNode.removeChild(chosenRow);
+         document.getElementById("deletedAnnouncement").innerHTML = "The row has been deleted.";
+         document.getElementById('confirmModal').style.display = "none";
+
+         }if(yesorno.innerHTML == "No"){
+          document.getElementById('confirmModal').style.display = "none";
+         }
+
+
+
+       }
+
+
+       function trapFocus(element, namespace) {
+    var focusableEls = element.querySelectorAll('a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])'),
+        firstFocusableEl = focusableEls[0];  
+        lastFocusableEl = focusableEls[focusableEls.length - 1];
+        KEYCODE_TAB = 9;
+
+    element.addEventListener('keydown', function(e) {
+        var isTabPressed = (e.key === 'Tab' || e.keyCode === KEYCODE_TAB);
+
+        if (!isTabPressed) { 
+            return; 
+        }
+
+        if ( e.shiftKey ) /* shift + tab */ {
+            if (document.activeElement === firstFocusableEl) {
+                lastFocusableEl.focus();
+                e.preventDefault();
+            }
+        } else /* tab */ {
+            if (document.activeElement === lastFocusableEl) {
+                
+                
+                firstFocusableEl.focus();
+                e.preventDefault();
+            }
+        }
+
+    });
+}
+
+
+
+//https://bitsofco.de/accessible-modal-dialog/
+
+        /*if(confirm("Are you sure you want to delete this row?")){
         removed.parentNode.removeChild(removed);
         document.getElementById("deletedAnnouncement").innerHTML = "The row has been deleted.";
-        }
-    }
+        }*/
+
+
 
 
     
